@@ -5,14 +5,14 @@ const defaultProps = {
   h1: 1.5 + 0.1 * Math.sin(10), // Напір в лівому басейні
   h2: 0.5 + 0.1 * Math.cos(10),  // Напір в правому басейні
   d: 0.1, // Коефіцієнт конвективної дифузії
-  gamma:  0.0065, // Коефіцієнт масообміну
+  gamma:  0.0065, // Коефіцієнт масообміну (в умові немає, використовуй це значення)
   sigma: 0.2, // Пористість грунту
   c0: (x) => -6.025 + Math.pow(Math.sin(10 * x),2),
   c1: (t) => 0, // с(0,t)
   c2: (t) => t * (9.2 + Math.pow(Math.sin(5000), 2)), // с(l,t)
   t: 100, // Кількість днів
   tau: 1, // Крок часу в днях
-  cg: 100, // Граничне насичення
+  cg: 100, // Граничне насичення (в умові немає, використовуй це значення)
 };
 
 class OneDimMassTransfer {
@@ -32,6 +32,7 @@ class OneDimMassTransfer {
       t,
     } = this.props;
 
+    // Визначаю коефіцієнти та інші змінні, що використовуються при пошуку альф і бет
     this.steps = parseInt(l / h);
     this.tSteps = parseInt(t/ tau);
     this.v = k * (h1 - h2) / l;
@@ -47,7 +48,7 @@ class OneDimMassTransfer {
   }
 
   calculateAlpha() {
-    const array =  [0];
+    const array = [0];
 
     for (let i = 1; i < this.steps; i += 1) {
       array[i] = this.b / (this.c - array[i-1] * this.a);
@@ -79,19 +80,29 @@ class OneDimMassTransfer {
   }
 
   solve() {
+    const {
+      c0,
+      c1,
+      c2,
+      h,
+      tau,
+    } = this.props;
+
     this.data = [];
 
+    // Задаю граничні умови справа та зліва
     for (let t = 0; t <= this.tSteps; t += 1) {
       this.data.push([]);
-
-      this.data[t][0] = this.props.c1(t * this.props.tau);
-      this.data[t][this.steps-1] = this.props.c2(t * this.props.tau);
+      this.data[t][0] = c1(t * tau);
+      this.data[t][this.steps-1] = c2(t * tau);
     }
 
+    // Задаю граничні умови в початковий момент часу
     for (let i = 1; i < this.steps - 1; i += 1) {
-      this.data[0][i] = this.props.c0(i * this.props.h);
+      this.data[0][i] = c0(i * h);
     }
 
+    //Методом прогонки знаходжу розв'язок
     for (let t = 1; t <= this.tSteps; t += 1) {
       const beta = this.calculateBeta(t);
 

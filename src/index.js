@@ -1,9 +1,11 @@
 import Plotly from 'plotly.js-dist';
 import OneDimMassTransfer from "./problems/OneDimMassTransfer";
 
+// Розв'язок задачі
 const problem = new OneDimMassTransfer();
 const result = problem.solve();
 
+// Виведення даних на графіку
 const xAxis = problem.getXAxis();
 const graphDiv = document.getElementById('graphDiv');
 
@@ -51,7 +53,7 @@ tInterval.addEventListener('input', (e) => {
 tRange.addEventListener('input', (e) => {
   interval = false;
   tInterval.checked = false;
-  t = e.target.value;
+  t = parseInt(e.target.value);
 
   renderPlot(t);
 });
