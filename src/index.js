@@ -1,38 +1,33 @@
 import Plotly from 'plotly.js-dist';
+import OneDimMassTransfer from "./problems/OneDimMassTransfer";
 
-const rand = () => Math.random();
-var x = [1, 2, 3, 4, 5];
-const new_data = (trace) => Object.assign(trace, {y: x.map(rand)});
+const problem = new OneDimMassTransfer();
+const result = problem.solve();
 
-// add random data to three line traces
-var data = [
-    {mode:'lines', line: {color: "#b55400"}},
-].map(new_data);
+console.log(problem.getXAxis())
 
-var layout = {
-    title: 'User Zoom Resets<br>When uirevision Changes',
-    uirevision:'true',
-    xaxis: {autorange: true},
-    yaxis: {autorange: true}
-};
+const graphDiv = document.getElementById('graphDiv');
+let t = 0;
 
-Plotly.react(graphDiv, data, layout);
+setInterval(() => {
+  var layout = {
+    title: `t = ${t}`,
+    uirevision: 'true',
+    yaxis: {
+      range: [0, 100],
+      autorange: false,
+    },
+  };
 
-var myPlot = document.getElementById('graphDiv');
 
-var cnt = 0;
-var interval = setInterval(function() {
-    data = data.map(new_data);
+  const data = [{
+    mode: 'lines',
+    line: {color: "#b55400"},
+    y: result[t],
+    x: problem.getXAxis(),
+  }];
 
-    // user interation will mutate layout and set autorange to false
-    // so we need to reset it to true
-    layout.xaxis.autorange = true;
-    layout.yaxis.autorange = true;
+  Plotly.react(graphDiv, data, layout);
 
-    // a new random number should ensure that uirevision will be different
-    // and so the graph will autorange after the Plotly.react
-    layout.uirevision = rand();
-
-    Plotly.react(graphDiv, data, layout);
-    if(cnt === 100) clearInterval(interval);
-}, 1000);
+  t = t < problem.props.t ? t + 1 : 0;
+}, 500);
