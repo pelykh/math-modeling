@@ -1,3 +1,4 @@
+// Lab 2
 const defaultProps = {
   l: 100, // Довжина пласта
   h: 20, // Крок довжини
@@ -95,13 +96,11 @@ function solveOneDimMassTempTransferProblem(props) {
   const b = mu / Math.pow(h,2) + rPlus / h;
   const c = a + b + gamma / d + sigma / (d * tau);
   const data = [];
-  const f = (i, j) => {
-    return (
-      gamma / 2 * d * cg +
-      (dt / d) * (temp[i][j-1] - 2 * temp[i][j] + temp[i][j+1]) / Math.pow(h, 2) +
-      sigma / tau / d * data[i-1][j-1]
-    )
-  };
+  const f = (i, j) => (
+    gamma / 2 * d * cg +
+    (dt / d) * (temp[i][j-1] - 2 * temp[i][j] + temp[i][j+1]) / Math.pow(h, 2) +
+    sigma / tau / d * data[i-1][j-1]
+  );
 
   const alpha = [0];
   for(let i = 1; i < steps; i++) {
