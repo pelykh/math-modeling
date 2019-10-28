@@ -92,23 +92,22 @@ function solveConvectionDiffusionProblem(props) {
       }
     }
     // Y
-    // for (let p = 1; p < nx - 1; p++) {
-    //   betaY[0] = data[i][ny - 1][p];
-    //
-    //   for (let j = 1; j < ny - 1; j++) {
-    //     betaY[j] = (ay * betaY[j - 1] + fy(i, j, p)) / (cy - ay * alphaY[j - 1]);
-    //   }
-    //
-    //   data[i][0][p] = betaY[ny - 1] / (1 - alphaY[ny - 1]);
-    //
-    //   for (let j = ny - 2; j > 0; j -= 1) {
-    //     data[i][j][p] = alphaX[j] * data[i][j + 1][p] + betaX[j];
-    //   }
-    // }
+    for (let p = 1; p < nx - 1; p++) {
+      betaY[0] = data[i][ny - 1][p];
+
+      for (let j = 1; j < ny - 1; j++) {
+        betaY[j] = (ay * betaY[j - 1] + fy(i, j, p)) / (cy - ay * alphaY[j - 1]);
+      }
+
+      data[i][0][p] = betaY[ny - 2] / (1 - alphaY[ny - 2]);
+
+      for (let j = ny - 2; j > 0; j -= 1) {
+        data[i][j][p] = alphaX[j] * data[i][j + 1][p] + betaX[j];
+      }
+    }
   }
 
-  console.log('data', data)
-
+  return data;
 }
 
 export default solveConvectionDiffusionProblem;
