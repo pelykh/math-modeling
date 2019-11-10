@@ -1,15 +1,11 @@
-
-
 import Plotly from 'plotly.js-dist';
-import solveConvectionDiffusionProblem from "../problems/ConvectionDiffusionProblem";
+import solveConvectionDiffusionProblem from "../problems/ConvectionDiffusion";
 const props = {
   t: 100,
 };
 
 const result = solveConvectionDiffusionProblem(props);
 const graphDiv = document.getElementById('graphDiv');
-
-console.log(result);
 
 const getLayout = (t, range=[0, 2]) => ({
   title: `t = ${t}`,
