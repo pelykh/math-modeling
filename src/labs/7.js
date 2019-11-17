@@ -10,8 +10,8 @@ document.getElementById('root').innerHTML = `
 
 const [x1, wetResult, x2, dryResult] = solveSoilSSSWithoutTopBottomMovesProblem();
 const x = x1.concat(x2);
-const translation = wetResult[0].concat(dryResult[0]).map((x) => x * 100000);
-const deformation = wetResult[1].concat(dryResult[1]).map((x) => x * 10000);
+const translation = wetResult[0].concat(dryResult[0]).map((x) => x * 100000); // * 10^-5
+const deformation = wetResult[1].concat(dryResult[1]).map((x) => x * 10000); // * 10^-4
 const tension = wetResult[2].concat(dryResult[2]);
 
 const waterLevelTrace = (x, y) => ({
@@ -41,6 +41,7 @@ const translationLayout = {
   title: 'Translation',
   xaxis: {
     title: 'u(x) * 10^-5',
+    zeroline: false,
   },
   yaxis: {
     title: 'X',
@@ -69,6 +70,7 @@ const deformationLayout = {
   title: 'Deformation',
   xaxis: {
     title: 'E(x) * 10^-4',
+    zeroline: false,
   },
   yaxis: {
     title: 'X',
@@ -97,6 +99,7 @@ const tensionLayout = {
   title: 'Tension',
   xaxis: {
     title: 'G(x)',
+    zeroline: false,
   },
   yaxis: {
     title: 'X',
