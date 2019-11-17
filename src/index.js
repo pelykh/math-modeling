@@ -1,1 +1,1 @@
-import Lab from './labs/7';
+import Lab from './labs/8';
