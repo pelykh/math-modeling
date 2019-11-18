@@ -1,11 +1,11 @@
-export const trace = (x, y, title) => ({
-  mode: 'lines',
-  name: title,
+export const trace = (x, y, name, color='#EE655A', mode='lines') => ({
+  mode,
+  name,
   x,
   y,
   line: {
     width: 2,
-    color: '#EE655A',
+    color
   }
 });
 

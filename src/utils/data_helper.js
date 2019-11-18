@@ -14,6 +14,11 @@ function initializeMultiDimArray(dims=[]) {
   return result
 }
 
+function linspace(a=0, b=0, n=1) {
+  return Array.from(Array(n), (x, i) => a + i * (b - a) / n);
+}
+
 export default {
   initializeMultiDimArray,
+  linspace,
 };
