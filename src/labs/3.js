@@ -4,6 +4,10 @@ const props = {
   t: 100,
 };
 
+document.getElementById('root').innerHTML = `
+  <div id="graphDiv"></div>
+`;
+
 const result = solveConvectionDiffusionProblem(props);
 const graphDiv = document.getElementById('graphDiv');
 
@@ -32,24 +36,8 @@ setInterval(() => {
   if (interval) {
     renderPlot(t, result, graphDiv);
 
-    tRange.value = t;
     t = t < props.t ? t + 1 : 0;
   }
 }, 500);
 
-const tInterval =  document.getElementById('tInterval');
-const tRange = document.getElementById('tRange');
-
-tInterval.checked = interval;
-
-tInterval.addEventListener('input', (e) => {
-  interval = tInterval.checked;
-});
-
-tRange.addEventListener('input', (e) => {
-  interval = false;
-  tInterval.checked = false;
-  t = parseInt(e.target.value);
-  renderPlot(t, result, graphDiv);
-});
 

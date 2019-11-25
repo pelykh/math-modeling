@@ -1,4 +1,5 @@
 import helper from "../utils/data_helper";
+import {solveMonotoneScheme} from "./common";
 
 const defaultProps = {
   H1: 59,
@@ -20,42 +21,6 @@ const defaultProps = {
   aGr: 51.2 * Math.pow(10, -6),
   vOs: 2.5 * Math.pow(10, -5),
 };
-
-function solveMonotoneScheme(props) {
-  const {
-    n, Tn, h, tau,
-    f0t, fLt, fx0,
-    a, b, c,
-    f, data,
-  } = props;
-
-  const alpha = helper.initializeMultiDimArray([n - 1]);
-  const beta = helper.initializeMultiDimArray([n - 1]);
-
-  for (let i = 0; i < Tn; i++) {
-    data[i][0] = f0t(i * tau);
-    data[i][n - 1] = fLt(i * tau);
-  }
-
-  for (let i = 1; i < n - 1; i++) {
-    alpha[i] = b / (c - alpha[i - 1] * a);
-    data[0][i] = fx0(i * h);
-  }
-
-  for (let k = 1; k < Tn; k++) {
-    beta[0] = data[k][0];
-
-    for (let i = 1; i < n - 1; i++) {
-      beta[i] = ((a * beta[i - 1]) + f(k, i)) / (c - alpha[i - 1] * a);
-    }
-
-    for (let i = n - 2; i > 0; i--) {
-      data[k][i] = alpha[i] * data[k][i + 1] + beta[i];
-    }
-  }
-
-  return data;
-}
 
 function solveSubProblem(props) {
   const {
